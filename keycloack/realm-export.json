@@ -1,0 +1,52 @@
+{
+    "realm": "music",
+    "enabled": true,
+    "clients": [
+        {
+            "clientId": "music-api",
+            "bearerOnly": true,
+            "protocol": "openid-connect"
+        },
+        {
+            "clientId": "music-frontend",
+            "publicClient": true,
+            "redirectUris": [
+                "http://frontend:3001/*"
+            ],
+            "webOrigins": [
+                "http://frontend:3001"
+            ]
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "name": "artist_read"
+            },
+            {
+                "name": "artist_write"
+            },
+            {
+                "name": "album_write"
+            }
+        ]
+    },
+    "users": [
+        {
+            "username": "admin",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "admin",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "artist_read",
+                "artist_write",
+                "album_write"
+            ]
+        }
+    ]
+}
