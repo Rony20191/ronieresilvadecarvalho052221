@@ -1,0 +1,62 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      - postgres
+      - minio
+    networks:
+      - music-catalog-manage
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
+    networks:
+      - music-catalog-manage
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: 'xukiliiiii'
+    command: server /data --console-address ":9001"
+    networks:
+      - music-catalog-manage
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lobcat123@@
+      POSTGRES_DB: music_catalog_manage
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - music-catalog-manage
+
+volumes:
+  postgres_data:
+
+networks:
+  music-catalog-manage:
+    driver: bridge
