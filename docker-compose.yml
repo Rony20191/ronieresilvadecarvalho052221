@@ -20,6 +20,7 @@ services:
     depends_on:
       - postgres
       - minio
+      - redis
     networks:
       - music-catalog-manage
   frontend:
@@ -29,6 +30,9 @@ services:
     container_name: frontend
     ports:
       - "3001:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
     networks:
@@ -45,6 +49,17 @@ services:
     command: server /data --console-address ":9001"
     networks:
       - music-catalog-manage
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=RedisPass
+    networks:
+      - music-catalog-manage
+    volumes:
+      - redis_data:/data
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.2
     container_name: keycloak
@@ -75,6 +90,7 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   music-catalog-manage:
