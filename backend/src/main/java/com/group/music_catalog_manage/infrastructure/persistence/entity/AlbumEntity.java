@@ -33,7 +33,6 @@ public class AlbumEntity {
     private Integer releaseYear;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    // Relationship to AlbumCover
     @Builder.Default
     private Set<AlbumCoverEntity> covers = new HashSet<>();
 

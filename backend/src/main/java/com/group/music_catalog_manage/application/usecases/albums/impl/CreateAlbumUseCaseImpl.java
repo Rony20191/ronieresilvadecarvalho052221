@@ -30,6 +30,7 @@ public class CreateAlbumUseCaseImpl implements CreateAlbumUseCase {
     private final AlbumCoverUrlProviderPort albumCoverUrlProviderPort;
     private final FileStoragePort fileStoragePort;
     private final ArtistRepositoryPort artistRepositoryPort;
+    private final com.group.music_catalog_manage.infrastructure.config.websocket.WebSocketService webSocketService;
 
     @Transactional
     public AlbumResponse execute(
@@ -37,9 +38,7 @@ public class CreateAlbumUseCaseImpl implements CreateAlbumUseCase {
             List<UUID> artistIds,
             String description,
             Integer releaseYear,
-            List<MultipartFile> covers
-    ) {
-
+            List<MultipartFile> covers) {
 
         Album album = new Album();
         album.setTitle(title);
@@ -52,7 +51,6 @@ public class CreateAlbumUseCaseImpl implements CreateAlbumUseCase {
             for (int i = 0; i < covers.size(); i++) {
                 MultipartFile file = covers.get(i);
 
-
                 boolean isMain = (i == 0);
 
                 try {
@@ -60,9 +58,7 @@ public class CreateAlbumUseCaseImpl implements CreateAlbumUseCase {
                             file.getInputStream(),
                             file.getSize(),
                             file.getContentType(),
-                            file.getOriginalFilename()
-                    );
-
+                            file.getOriginalFilename());
 
                     AlbumCover cover = new AlbumCover(fileKey, isMain);
                     album.addCover(cover);
@@ -75,7 +71,9 @@ public class CreateAlbumUseCaseImpl implements CreateAlbumUseCase {
         album.setArtists(artists);
         albumRepositoryPort.save(album);
 
-        return AlbumMapper.toResponse(album, albumCoverUrlProviderPort);
+        AlbumResponse response = AlbumMapper.toResponse(album, albumCoverUrlProviderPort);
+        webSocketService.notifyAlbumCreated(response);
+        return response;
     }
 
 }
