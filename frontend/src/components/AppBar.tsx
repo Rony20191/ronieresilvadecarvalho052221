@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { Menu, Bell, Search, Sun, Moon } from 'lucide-react';
+import { Menu, Search, Sun, Moon } from 'lucide-react';
 import UserMenu from './UserMenu';
 import SessionTimer from './SessionTimer';
+import NotificationDropdown from './NotificationDropdown';
+import { useNotifications } from '@/hooks/useNotifications';
 
 interface AppBarProps {
   toggleDrawer: () => void;
@@ -12,7 +13,7 @@ interface AppBarProps {
 }
 
 export default function AppBar({ toggleDrawer, isDarkMode, toggleDarkMode }: AppBarProps) {
-  const [notifications, setNotifications] = useState(3);
+  const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotifications } = useNotifications();
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-md">
@@ -66,16 +67,13 @@ export default function AppBar({ toggleDrawer, isDarkMode, toggleDarkMode }: App
           </button>
 
           {/* Notifications */}
-          <div className="relative">
-            <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 relative">
-              <Bell className="w-5 h-5" />
-              {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {notifications}
-                </span>
-              )}
-            </button>
-          </div>
+          <NotificationDropdown
+            notifications={notifications}
+            unreadCount={unreadCount}
+            onMarkAsRead={markAsRead}
+            onMarkAllAsRead={markAllAsRead}
+            onClear={clearNotifications}
+          />
 
           {/* User menu */}
           <UserMenu />

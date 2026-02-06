@@ -73,7 +73,8 @@ class UpdateAlbumUseCaseImpTest {
                 artistIds,
                 request.getDescription(),
                 request.getReleaseYear(),
-                null // covers
+                null, // covers
+                null // coverIdsToRemove
         );
 
         assertThat(response).isNotNull();

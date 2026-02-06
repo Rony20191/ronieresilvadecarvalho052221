@@ -1,6 +1,5 @@
 package com.group.music_catalog_manage.application.usecases.albums.impl;
 
-import com.group.music_catalog_manage.application.dto.request.UpdateAlbumRequest;
 import com.group.music_catalog_manage.application.dto.response.AlbumResponse;
 import com.group.music_catalog_manage.application.mapper.AlbumMapper;
 import com.group.music_catalog_manage.application.ports.out.albums.AlbumCoverUrlProviderPort;
@@ -33,7 +32,7 @@ public class UpdateAlbumUseCaseImp implements UpdateAlbumUseCase {
     private final FileStoragePort fileStoragePort;
 
     public AlbumResponse execute(UUID id, String title, List<UUID> artistIds, String description, Integer releaseYear,
-            List<MultipartFile> covers) {
+            List<MultipartFile> covers, List<UUID> coverIdsToRemove) {
         Album album = albumRepositoryPort.findById(id)
                 .orElseThrow(() -> new AlbumNotFoundException(id.toString()));
 
@@ -43,6 +42,11 @@ public class UpdateAlbumUseCaseImp implements UpdateAlbumUseCase {
 
         List<Artist> artists = artistRepositoryPort.findByIds(artistIds);
         album.setArtists(artists);
+
+        // Remove specified covers
+        if (coverIdsToRemove != null && !coverIdsToRemove.isEmpty()) {
+            album.getCovers().removeIf(cover -> cover.getId() != null && coverIdsToRemove.contains(cover.getId()));
+        }
 
         if (covers != null && !covers.isEmpty()) {
             for (int i = 0; i < covers.size(); i++) {

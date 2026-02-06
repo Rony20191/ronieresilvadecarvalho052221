@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface UpdateAlbumUseCase {
     AlbumResponse execute(UUID id, String title, List<UUID> artistIds, String description, Integer releaseYear,
-            List<MultipartFile> covers);
+            List<MultipartFile> covers, List<UUID> coverIdsToRemove);
 }

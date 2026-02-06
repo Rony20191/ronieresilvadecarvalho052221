@@ -1,13 +1,11 @@
 package com.group.music_catalog_manage.application.controller.v1;
 
 import com.group.music_catalog_manage.application.dto.request.SearchAlbumRequest;
-import com.group.music_catalog_manage.application.dto.request.UpdateAlbumRequest;
 import com.group.music_catalog_manage.application.dto.response.AlbumResponse;
 import com.group.music_catalog_manage.application.usecases.albums.*;
 import com.group.music_catalog_manage.infrastructure.config.websocket.WebSocketService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cache.annotation.CacheEvict;
@@ -64,9 +62,11 @@ public class AlbumController {
             @RequestParam("artistIds") List<UUID> artistIds,
             @RequestParam("releaseYear") Integer releaseYear,
             @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "coverIdsToRemove", required = false) List<UUID> coverIdsToRemove,
             @RequestPart(value = "cover", required = false) List<MultipartFile> covers) {
 
-        AlbumResponse updatedAlbum = updateAlbumUseCase.execute(id, title, artistIds, description, releaseYear, covers);
+        AlbumResponse updatedAlbum = updateAlbumUseCase.execute(id, title, artistIds, description, releaseYear, covers,
+                coverIdsToRemove);
 
         webSocketService.notifyAlbumUpdated(updatedAlbum);
 

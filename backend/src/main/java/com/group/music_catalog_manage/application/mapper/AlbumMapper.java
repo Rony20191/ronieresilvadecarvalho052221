@@ -11,55 +11,54 @@ import java.util.List;
 
 public final class AlbumMapper {
 
-    public static AlbumResponse toResponse(
-            Album album,
-            AlbumCoverUrlProviderPort coverUrlProvider) {
+        public static AlbumResponse toResponse(
+                        Album album,
+                        AlbumCoverUrlProviderPort coverUrlProvider) {
 
-        List<AlbumCoverResponse> coverResponses = album.getCovers().stream()
-                .map(c -> new AlbumCoverResponse(
-                        c.getFileKey(),   // ou c.getId() se o record tiver id
-                        c.isPrimary(),
-                        coverUrlProvider.generateUrl(c.getFileKey())
-                ))
-                .toList();
+                List<AlbumCoverResponse> coverResponses = album.getCovers().stream()
+                                .map(c -> new AlbumCoverResponse(
+                                                c.getId(),
+                                                c.getFileKey(),
+                                                c.isPrimary(),
+                                                coverUrlProvider.generateUrl(c.getFileKey())))
+                                .toList();
 
-        List<ArtistResponse> artistResponses = album.getArtists().stream()
-                .map(a -> ArtistResponse.builder()
-                        .id(a.getId())
-                        .name(a.getName())
-                        .type(a.getType())
-                        .formationYear(a.getFormationYear())
-                        .biography(a.getBiography())
-                        .createdAt(a.getCreatedAt())
-                        .updatedAt(a.getUpdatedAt())
-                        .build()
-                )
-                .toList();
-        return new AlbumResponse(
-                album.getId(),
-                album.getTitle(),
-                album.getDescription(),
-                album.getReleaseYear(),
-                coverResponses,
-                artistResponses,
-                album.getCreatedAt(),
-                album.getUpdatedAt());
-    }
-
-    private static String resolveCoverUrl(
-            Album album,
-            AlbumCoverUrlProviderPort coverUrlProvider) {
-
-        if (album.getCovers() == null || album.getCovers().isEmpty()) {
-            return null;
+                List<ArtistResponse> artistResponses = album.getArtists().stream()
+                                .map(a -> ArtistResponse.builder()
+                                                .id(a.getId())
+                                                .name(a.getName())
+                                                .type(a.getType())
+                                                .formationYear(a.getFormationYear())
+                                                .biography(a.getBiography())
+                                                .createdAt(a.getCreatedAt())
+                                                .updatedAt(a.getUpdatedAt())
+                                                .build())
+                                .toList();
+                return new AlbumResponse(
+                                album.getId(),
+                                album.getTitle(),
+                                album.getDescription(),
+                                album.getReleaseYear(),
+                                coverResponses,
+                                artistResponses,
+                                album.getCreatedAt(),
+                                album.getUpdatedAt());
         }
 
-        AlbumCover cover = album.getCovers().stream()
-                .filter(AlbumCover::isPrimary)
-                .findFirst()
-                .orElse(album.getCovers().get(0));
+        private static String resolveCoverUrl(
+                        Album album,
+                        AlbumCoverUrlProviderPort coverUrlProvider) {
 
-        return coverUrlProvider.generateUrl(cover.getFileKey());
-    }
+                if (album.getCovers() == null || album.getCovers().isEmpty()) {
+                        return null;
+                }
+
+                AlbumCover cover = album.getCovers().stream()
+                                .filter(AlbumCover::isPrimary)
+                                .findFirst()
+                                .orElse(album.getCovers().get(0));
+
+                return coverUrlProvider.generateUrl(cover.getFileKey());
+        }
 
 }

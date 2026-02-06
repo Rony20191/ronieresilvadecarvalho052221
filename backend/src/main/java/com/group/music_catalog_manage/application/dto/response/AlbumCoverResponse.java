@@ -1,7 +1,10 @@
 package com.group.music_catalog_manage.application.dto.response;
 
+import java.util.UUID;
+
 public record AlbumCoverResponse(
-        String fileKey,
-        boolean primary,
-        String presignedUrl
-) {}
+                UUID id,
+                String fileKey,
+                boolean primary,
+                String presignedUrl) {
+}

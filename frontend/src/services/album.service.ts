@@ -56,6 +56,12 @@ export const AlbumService = {
             });
         }
 
+        if (request.coverIdsToRemove && request.coverIdsToRemove.length > 0) {
+            request.coverIdsToRemove.forEach(id => {
+                formData.append("coverIdsToRemove", id);
+            });
+        }
+
         if (covers && covers.length > 0) {
             covers.forEach(cover => {
                 formData.append("cover", cover);

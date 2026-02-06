@@ -386,6 +386,45 @@ KEYCLOAK_ADMIN_PASSWORD=admin
 
 ---
 
+## 🔧 Troubleshooting
+
+### Resetar Banco de Dados
+
+Se você encontrar problemas com as migrations do Flyway ou precisar limpar o banco de dados:
+
+```bash
+# Resetar o schema do banco de dados (CUIDADO: Apaga todos os dados!)
+docker-compose exec -T postgres psql -U postgres -d music_catalog_manage -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
+# Reiniciar o backend para aplicar as migrations novamente
+docker-compose restart backend
+```
+
+### Problemas Comuns
+
+#### WebSocket não conecta
+- Verifique se o backend está rodando: `docker-compose ps`
+- Verifique os logs: `docker-compose logs backend`
+- Certifique-se de que está autenticado na aplicação
+
+#### Erro de Migration
+- Use o comando de reset do banco acima
+- Verifique se todas as migrations estão na ordem correta
+- Confira os logs do backend: `docker-compose logs backend`
+
+#### Imagens não aparecem
+- Verifique se o MinIO está rodando: `docker-compose ps minio`
+- Acesse o console do MinIO: http://localhost:9001
+- Verifique se o bucket `music-catalog` existe
+
+#### Erro de autenticação
+- Verifique se o Keycloak está rodando: `docker-compose ps keycloack`
+- Acesse o Keycloak: http://localhost:8081
+- Verifique se o realm `music` existe
+- Use as credenciais padrão: `admin` / `admin`
+
+---
+
 ## 📚 Referências
 
 - [Spring Boot](https://spring.io/projects/spring-boot)

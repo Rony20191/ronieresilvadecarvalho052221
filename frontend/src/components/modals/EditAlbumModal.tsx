@@ -127,8 +127,24 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
         setError(null);
 
         try {
-            await AlbumService.update(album.id, formData);
+            // Prepare new covers
+            const newCoverFiles = covers
+                .filter(c => c.isNew)
+                .map(c => (c as CoverPreview).file);
 
+            // Prepare cover IDs to remove
+            const coverIdsToRemove = covers
+                .filter(c => !c.isNew && (c as ExistingCover).toRemove)
+                .map(c => (c as ExistingCover).cover.id);
+
+            // Update request with artists and cover removals
+            const updateRequest: UpdateAlbumRequest = {
+                ...formData,
+                artistIds: selectedArtistIds,
+                coverIdsToRemove: coverIdsToRemove.length > 0 ? coverIdsToRemove : undefined,
+            };
+
+            await AlbumService.update(album.id, updateRequest, newCoverFiles.length > 0 ? newCoverFiles : undefined);
 
             onSuccess();
             onClose();
@@ -158,8 +174,8 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
                         type="button"
                         onClick={() => setActiveTab('info')}
                         className={`px-4 py-2 font-medium text-sm transition-all border-b-2 -mb-px ${activeTab === 'info'
-                                ? 'border-purple-600 text-purple-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
+                            ? 'border-purple-600 text-purple-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         Informações
@@ -168,8 +184,8 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
                         type="button"
                         onClick={() => setActiveTab('covers')}
                         className={`px-4 py-2 font-medium text-sm transition-all border-b-2 -mb-px flex items-center gap-2 ${activeTab === 'covers'
-                                ? 'border-purple-600 text-purple-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
+                            ? 'border-purple-600 text-purple-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <ImageIcon className="w-4 h-4" />
@@ -179,8 +195,8 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
                         type="button"
                         onClick={() => setActiveTab('artists')}
                         className={`px-4 py-2 font-medium text-sm transition-all border-b-2 -mb-px flex items-center gap-2 ${activeTab === 'artists'
-                                ? 'border-purple-600 text-purple-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
+                            ? 'border-purple-600 text-purple-600'
+                            : 'border-transparent text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <Users className="w-4 h-4" />
@@ -354,8 +370,8 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
                                         type="button"
                                         onClick={() => toggleArtist(artist.id)}
                                         className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all ${selectedArtistIds.includes(artist.id)
-                                                ? 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800'
-                                                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700'
+                                            ? 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800'
+                                            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700'
                                             }`}
                                     >
                                         <span className="truncate">{artist.name}</span>

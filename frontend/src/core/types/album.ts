@@ -1,6 +1,7 @@
 import { Artist } from "./artist";
 
 export interface AlbumCover {
+    id: string;
     fileKey: string;
     primary: boolean;
     presignedUrl?: string;
@@ -29,5 +30,6 @@ export interface UpdateAlbumRequest {
     description: string;
     releaseYear: number;
     artistIds?: string[];
+    coverIdsToRemove?: string[];
 }
 

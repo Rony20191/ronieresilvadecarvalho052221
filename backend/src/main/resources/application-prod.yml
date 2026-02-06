@@ -51,8 +51,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/music
-          jwk-set-uri: http://keycloak:8080/realms/music/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/realms/music-app
+          jwk-set-uri: http://keycloak:8080/realms/music-app/protocol/openid-connect/certs
 
 management:
   endpoints:
