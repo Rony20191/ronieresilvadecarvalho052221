@@ -1,0 +1,88 @@
+logging:
+  level:
+    org.springdoc: TRACE
+    org.springframework.web: DEBUG
+    org.springframework.web.method.ControllerAdviceBean: DEBUG
+    org.springframework.context: DEBUG
+    com.giffing.bucket4j: DEBUG
+    org.springframework.boot.diagnostics: DEBUG
+
+server:
+  servlet:
+    context-path: /api
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+spring:
+  application:
+    name: music-catalog-manage
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  minio:
+    url: http://minio:9000
+    bucket: music-catalog
+    access-key: minioadmin
+    secret-key: xukiliiiii
+  flyway:
+     enabled: true
+     baseline-on-migrate: true
+     locations:
+      - classpath:db/migration
+      - classpath:db/seed
+     sql-migration-suffixes: .sql
+     placeholders:
+       is_dev: true
+  datasource:
+    url: jdbc:postgresql://postgres:5432/music_catalog_manage
+    username: postgres
+    password: lobcat123@@
+    driver-class-name: org.postgresql.Driver
+  cache:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: 6379
+      password: RedisPass
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KC_ISSUER_URI:http://localhost:8081/realms/music-app}
+          jwk-set-uri: ${KC_JWKS_URI:http://localhost:8081/realms/music-app/protocol/openid-connect/certs}
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: 6379
+      password: RedisPass
+
+app:
+  keycloak:
+    server-url: ${KC_SERVER_URL:http://localhost:8081}
+    realm: ${KC_REALM:music-app}
+    client-id: ${KC_CLIENT_ID:music-app-client2}
+    client-secret: ${KC_CLIENT_SECRET:FdBzYFPVIo20FgDrVZyrtpsxz9PVOate}
+  external:
+    regional-api-url: https://integrador-argus-api.geia.vip/v1/regionais
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+      mapping: /metrics
+
+
+

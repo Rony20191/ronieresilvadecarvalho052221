@@ -1,0 +1,31 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      url: ".*"
+      filter-method: servlet
+      filter-order: 1000
+      strategy: first # Indica para usar a primeira chave encontrada
+      http-response-body: >
+        {
+          "title": "Too Many Requests",
+          "status": 429,
+          "detail": "Você atingiu o limite de 10 requisições por minuto. Tente novamente em breve.",
+          "timestamp": "${java.time.Instant.now()}",
+          "path": "global"
+        }
+        http-content-type: "application/json;charset=UTF-8"
+      rate-limits:
+        - bandwidths:
+            - capacity: 10
+              time: 1
+              unit: minutes
+
+              refill-speed: interval
+
+app:
+  external:
+    regional-api-url: https://integrador-argus-api.geia.vip/v1/regionais
