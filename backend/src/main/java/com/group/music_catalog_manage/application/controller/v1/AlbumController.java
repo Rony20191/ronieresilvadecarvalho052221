@@ -51,7 +51,6 @@ public class AlbumController {
                 .buildAndExpand(createdAlbum.id())
                 .toUri();
 
-        // Notify all clients about the new album
         webSocketService.notifyAlbumCreated(createdAlbum);
 
         return ResponseEntity.created(location).body(createdAlbum);
@@ -69,7 +68,6 @@ public class AlbumController {
 
         AlbumResponse updatedAlbum = updateAlbumUseCase.execute(id, title, artistIds, description, releaseYear, covers);
 
-        // Notify all clients about the album update
         webSocketService.notifyAlbumUpdated(updatedAlbum);
 
         return ResponseEntity.ok(updatedAlbum);
@@ -80,7 +78,6 @@ public class AlbumController {
     public ResponseEntity<Void> deleteAlbum(@PathVariable String id) {
         deleteAlbumUseCase.execute(id);
 
-        // Notify all clients about the album deletion
         webSocketService.notifyAlbumDeleted(id);
 
         return ResponseEntity.noContent().build();

@@ -58,7 +58,6 @@ public class ArtistController {
                 .buildAndExpand(response.getId())
                 .toUri();
 
-        // Notify all clients about the new artist
         webSocketService.notifyArtistCreated(response);
 
         return ResponseEntity.created(location).body(response);
@@ -78,7 +77,6 @@ public class ArtistController {
 
         ArtistResponse updatedArtist = updateArtistsUseCase.execute(id, request);
 
-        // Notify all clients about the artist update
         webSocketService.notifyArtistUpdated(updatedArtist);
 
         return ResponseEntity.ok(updatedArtist);
@@ -95,7 +93,6 @@ public class ArtistController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         deleteArtistUseCase.execute(id);
 
-        // Notify all clients about the artist deletion
         webSocketService.notifyArtistDeleted(id.toString());
 
         return ResponseEntity.noContent().build();
