@@ -26,6 +26,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
             "http://frontend:3000",
+             "http://localhost:3000",
             "http://frontend:5000",
             "http://frontend:8080");
 
@@ -41,24 +42,19 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
         String requestPath = request.getRequestURI();
 
-        // Skip rate limiting for WebSocket and documentation endpoints
         if (isExcludedPath(requestPath)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 1. Origin Blocking
         String origin = request.getHeader("Origin");
 
-        // Skip origin check for requests without Origin header (same-origin, curl,
-        // etc.)
         if (origin != null && !ALLOWED_ORIGINS.contains(origin)) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.getWriter().write("Origin not allowed");
             return;
         }
 
-        // 2. Rate Limiting (100 requests per minute per IP)
         String clientIp = getClientIp(request);
         Bucket bucket = proxyManager.builder().build(clientIp.getBytes(), bucketConfigurationSupplier());
 
@@ -81,8 +77,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private Supplier<io.github.bucket4j.BucketConfiguration> bucketConfigurationSupplier() {
         return () -> io.github.bucket4j.BucketConfiguration.builder()
                 .addLimit(io.github.bucket4j.Bandwidth.builder()
-                        .capacity(100)
-                        .refillGreedy(100, Duration.ofMinutes(1))
+                        .capacity(10)
+                        .refillGreedy(10, Duration.ofMinutes(1))
                         .build())
                 .build();
     }
