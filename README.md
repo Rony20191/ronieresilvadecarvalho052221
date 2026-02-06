@@ -344,8 +344,6 @@ docker-compose build
 ### Princípios Aplicados
 
 - **SOLID**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
-- **DRY**: Don't Repeat Yourself
-- **KISS**: Keep It Simple, Stupid
 - **Separation of Concerns**: Camadas bem definidas
 - **Dependency Injection**: Spring IoC Container
 - **Ports & Adapters**: Interfaces para desacoplamento
