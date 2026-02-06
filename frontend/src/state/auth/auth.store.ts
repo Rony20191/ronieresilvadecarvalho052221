@@ -56,7 +56,6 @@ class AuthStore {
             clearInterval(this.refreshInterval);
         }
 
-        // Check every 30 seconds
         this.refreshInterval = setInterval(() => {
             this.checkAndRefreshToken();
         }, 30000);
@@ -77,7 +76,6 @@ class AuthStore {
         const now = Date.now();
         const timeUntilExpiry = tokenExpiresAt - now;
 
-        // Refresh if less than 2 minutes remaining
         if (timeUntilExpiry < 120000) {
             try {
                 await this.refreshToken();

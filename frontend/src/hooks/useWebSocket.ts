@@ -15,7 +15,6 @@ export function useWebSocket() {
         });
 
         return () => {
-            // Don't disconnect on unmount as other components might be using it
         };
     }, []);
 

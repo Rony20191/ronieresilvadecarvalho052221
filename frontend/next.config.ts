@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'localhost',
-        port: '9000',
+        hostname: 'backend',
+        port: '8080',
         pathname: '/music-catalog/**',
       },
     ],

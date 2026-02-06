@@ -4,7 +4,6 @@ import EditArtistModal from './EditArtistModal'
 import { ArtistService } from '@/services/artist.service'
 import { ArtistType } from '@/core/types/enums'
 
-// Mock dependencies
 vi.mock('@/services/artist.service', () => ({
     ArtistService: {
         update: vi.fn(),

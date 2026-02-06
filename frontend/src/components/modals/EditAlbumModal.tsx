@@ -95,7 +95,6 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
         if (item.isNew) {
             setCovers(prev => prev.filter((_, i) => i !== index));
         } else {
-            // Mark existing cover for removal
             setCovers(prev => prev.map((c, i) =>
                 i === index && !c.isNew ? { ...c, toRemove: true } : c
             ));
@@ -128,11 +127,8 @@ export default function EditAlbumModal({ isOpen, onClose, onSuccess, album }: Ed
         setError(null);
 
         try {
-            // Update basic album info
             await AlbumService.update(album.id, formData);
 
-            // Note: For full cover/artist management, backend endpoints would need to be extended
-            // Current implementation updates basic info only
 
             onSuccess();
             onClose();

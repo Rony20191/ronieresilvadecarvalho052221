@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import Modal from './Modal'
 
-// Mock Lucide icons to avoid rendering issues
 vi.mock('lucide-react', () => ({
     X: () => <span data-testid="x-icon">X</span>
 }))

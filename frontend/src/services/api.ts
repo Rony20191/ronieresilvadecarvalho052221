@@ -1,18 +1,14 @@
 import Cookies from "js-cookie";
 import { authStore } from "@/state/auth/auth.store";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
-// Function to handle logout and redirect
 function handleUnauthorized() {
-    // Clear all auth cookies
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
 
-    // Reset auth store
     authStore.logout();
 
-    // Redirect to login
     if (typeof window !== 'undefined') {
         window.location.href = '/login';
     }
@@ -74,7 +70,6 @@ export const api = {
             headers: this.getHeaders(),
         });
 
-        // Check for 401 before throwing
         if (response.status === 401) {
             handleUnauthorized();
             throw new Error('Unauthorized');
@@ -97,7 +92,6 @@ export const api = {
     },
 
     async handleResponse<T>(response: Response): Promise<T> {
-        // Handle 401 Unauthorized
         if (response.status === 401) {
             handleUnauthorized();
             throw new Error('Unauthorized');

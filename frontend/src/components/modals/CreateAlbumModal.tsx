@@ -73,7 +73,6 @@ export default function CreateAlbumModal({ isOpen, onClose, onSuccess }: CreateA
         if (files && files.length > 0) {
             processFiles(files);
         }
-        // Reset input so the same file can be selected again
         e.target.value = '';
     };
 
@@ -126,7 +125,6 @@ export default function CreateAlbumModal({ isOpen, onClose, onSuccess }: CreateA
             await AlbumService.create(formData, files.length > 0 ? files : undefined);
             onSuccess();
             onClose();
-            // Reset form
             setFormData({
                 title: '',
                 description: '',

@@ -5,7 +5,6 @@ import { artistsStore, ArtistsState } from '@/state/artists/artists.store'
 import { BehaviorSubject } from 'rxjs'
 import { ArtistType } from '@/core/types/enums'
 
-// Mock dependencies
 const { stateSubject } = vi.hoisted(() => {
     const { BehaviorSubject } = require('rxjs')
     const subject = new BehaviorSubject({
@@ -42,7 +41,6 @@ vi.mock('@/services/artist.service', () => ({
     },
 }))
 
-// Mock child components
 vi.mock('@/components/ui/data-table', () => ({
     DataTable: () => <div data-testid="data-table">DataTable</div>
 }))
@@ -106,13 +104,8 @@ describe('ArtistsPage', () => {
         })
         render(<ArtistsPage />)
 
-        // Desktop view has DataTable mocked
         expect(screen.getByTestId('data-table')).toBeInTheDocument()
 
-        // Mobile view renders cards - testing if card content is present (hidden on md usually, but jsdom layout might behave differently or we can simple check presence)
-        // By default jsdom doesn't process media queries unless configured, usually `hidden md:block` classes don't hide elements in standard getByText unless explicit styles are computed. 
-        // Tailwind classes require a transformer or real browser.
-        // We can assume elements are in DOM.
         expect(screen.getByText('Artist 1')).toBeInTheDocument()
     })
 

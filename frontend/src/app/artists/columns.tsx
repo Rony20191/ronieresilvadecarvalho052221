@@ -7,7 +7,6 @@ import { ArtistTypeLabels } from "@/core/types/enums"
 import Link from "next/link";
 
 interface ColumnsProps {
-    // onView: (artist: Artist) => void; // Removed
     onEdit: (artist: Artist) => void;
     onDelete: (artist: Artist) => void;
 }
@@ -79,9 +78,7 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Artist
     },
 ]
 
-// Keep backwards compatibility
 export const columns: ColumnDef<Artist>[] = getColumns({
-    // onView: (artist) => console.log("View", artist),
     onEdit: (artist) => console.log("Edit", artist),
     onDelete: (artist) => console.log("Delete", artist),
 });

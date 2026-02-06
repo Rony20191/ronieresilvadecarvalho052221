@@ -4,7 +4,6 @@ import CreateArtistModal from './CreateArtistModal'
 import { ArtistService } from '@/services/artist.service'
 import { ArtistType } from '@/core/types/enums'
 
-// Mock dependencies
 vi.mock('@/services/artist.service', () => ({
     ArtistService: {
         create: vi.fn(),
@@ -41,7 +40,6 @@ describe('CreateArtistModal', () => {
 
         fireEvent.click(submitBtn)
 
-        // HTML5 validation prevents submission if fields are empty
         expect(ArtistService.create).not.toHaveBeenCalled()
     })
 
@@ -67,7 +65,6 @@ describe('CreateArtistModal', () => {
     })
 
     it('displays error message on failure', async () => {
-        // @ts-ignore
         ArtistService.create.mockRejectedValueOnce(new Error('API Error'))
         render(<CreateArtistModal {...defaultProps} />)
 

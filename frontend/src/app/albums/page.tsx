@@ -26,7 +26,6 @@ export default function AlbumsPage() {
     const [notification, setNotification] = useState<string | null>(null)
     const { isConnected } = useWebSocket()
 
-    // WebSocket handlers for real-time updates
     const handleAlbumCreated = useCallback(() => {
         setNotification('Novo álbum adicionado!')
         albumsStore.loadAlbums()
@@ -45,7 +44,6 @@ export default function AlbumsPage() {
         setTimeout(() => setNotification(null), 3000)
     }, [])
 
-    // Subscribe to album updates via WebSocket
     useAlbumUpdates(handleAlbumCreated, handleAlbumUpdated, handleAlbumDeleted)
 
     useEffect(() => {
@@ -276,4 +274,3 @@ export default function AlbumsPage() {
         </div>
     )
 }
-

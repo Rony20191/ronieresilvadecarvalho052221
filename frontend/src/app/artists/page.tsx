@@ -20,12 +20,10 @@ export default function ArtistsPage() {
     const [state, setState] = useState<ArtistsState>(artistsStore.snapshot)
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    // const [isViewModalOpen, setIsViewModalOpen] = useState(false) // Removed
     const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null)
     const [notification, setNotification] = useState<string | null>(null)
     const { isConnected } = useWebSocket()
 
-    // WebSocket handlers for real-time updates
     const handleArtistCreated = useCallback(() => {
         setNotification('Novo artista adicionado!')
         artistsStore.loadArtists()
@@ -44,7 +42,6 @@ export default function ArtistsPage() {
         setTimeout(() => setNotification(null), 3000)
     }, [])
 
-    // Subscribe to artist updates via WebSocket
     useArtistUpdates(handleArtistCreated, handleArtistUpdated, handleArtistDeleted)
 
     useEffect(() => {

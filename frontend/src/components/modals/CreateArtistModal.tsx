@@ -31,7 +31,6 @@ export default function CreateArtistModal({ isOpen, onClose, onSuccess }: Create
             await ArtistService.create(formData);
             onSuccess();
             onClose();
-            // Reset form
             setFormData({
                 name: '',
                 type: ArtistType.SOLO,

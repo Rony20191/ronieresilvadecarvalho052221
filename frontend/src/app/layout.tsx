@@ -30,12 +30,10 @@ export default function RootLayout({
     const sub = authStore.state$.subscribe(state => {
       setAuthState(state);
 
-      // Redirect to login if not authenticated and not already on login page
       if (!state.isAuthenticated && pathname !== '/login') {
         router.push('/login');
       }
 
-      // Redirect to home if authenticated and on login page
       if (state.isAuthenticated && pathname === '/login') {
         router.push('/');
       }
@@ -46,8 +44,6 @@ export default function RootLayout({
 
   const isLoginPage = pathname === '/login';
 
-  // To prevent hydration mismatch, we ensure the initial render matches the server
-  // Rendering null or a loading state until mounted is a standard Next.js pattern
   if (!mounted) {
     return (
       <html lang="pt-BR" suppressHydrationWarning>

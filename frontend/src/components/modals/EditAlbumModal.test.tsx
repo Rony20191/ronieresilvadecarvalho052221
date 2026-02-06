@@ -5,7 +5,6 @@ import { AlbumService } from '@/services/album.service'
 import { ArtistService } from '@/services/artist.service'
 import { ArtistType } from '@/core/types/enums'
 
-// Mock dependencies
 vi.mock('@/services/album.service', () => ({
     AlbumService: {
         update: vi.fn(),
@@ -48,7 +47,6 @@ describe('EditAlbumModal', () => {
     }
 
     beforeEach(() => {
-        // @ts-ignore
         ArtistService.getAll.mockResolvedValue({
             content: [{ id: '1', name: 'Artist A' }]
         })
@@ -62,7 +60,6 @@ describe('EditAlbumModal', () => {
     it('submits updates', async () => {
         render(<EditAlbumModal {...defaultProps} />)
 
-        // Switch tabs if needed (Info is default)
         fireEvent.change(screen.getByDisplayValue('Old Album'), { target: { value: 'New Title' } })
 
         fireEvent.click(screen.getByText('Salvar Alterações'))

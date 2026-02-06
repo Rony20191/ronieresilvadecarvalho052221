@@ -28,7 +28,6 @@ export default function SessionTimer() {
             setTime(remaining);
         }, 1000);
 
-        // Initial call
         setTime(authStore.getTimeRemaining());
 
         return () => clearInterval(interval);

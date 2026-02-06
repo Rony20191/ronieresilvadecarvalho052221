@@ -4,7 +4,6 @@ import UserMenu from './UserMenu'
 import { authStore } from '@/state/auth/auth.store'
 import { BehaviorSubject } from 'rxjs'
 
-// Mock Lucide icons
 vi.mock('lucide-react', () => ({
     User: () => <span>UserIcon</span>,
     Settings: () => <span>SettingsIcon</span>,
@@ -12,8 +11,6 @@ vi.mock('lucide-react', () => ({
     ChevronDown: () => <span>ChevronDown</span>,
 }))
 
-// Mock auth store
-// Mock auth store
 const { subject } = vi.hoisted(() => {
     const { BehaviorSubject } = require('rxjs')
     return {
@@ -32,7 +29,6 @@ vi.mock('@/state/auth/auth.store', () => ({
     }
 }))
 
-// Mock window.location
 const mockLocation = { href: '' }
 Object.defineProperty(window, 'location', {
     value: mockLocation,

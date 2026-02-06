@@ -13,7 +13,6 @@ export const AlbumService = {
         };
 
         if (pageRequest.sorts && pageRequest.sorts.length > 0) {
-            // Spring Data expects: sort=field,direction
             params.sort = pageRequest.sorts.map(s => `${s.field},${s.direction}`);
         }
 
@@ -27,17 +26,14 @@ export const AlbumService = {
     create: async (request: CreateAlbumRequest, covers?: File[]): Promise<Album> => {
         const formData = new FormData();
 
-        // Match backend @RequestParam names
         formData.append("title", request.title);
         formData.append("description", request.description);
         formData.append("releaseYear", request.releaseYear.toString());
 
-        // Pass artistIds as individual params for Spring's List<UUID>
         request.artistIds.forEach(id => {
             formData.append("artistIds", id);
         });
 
-        // Support multiple cover uploads
         if (covers && covers.length > 0) {
             covers.forEach(cover => {
                 formData.append("cover", cover);
@@ -54,8 +50,6 @@ export const AlbumService = {
         formData.append("description", request.description);
         formData.append("releaseYear", request.releaseYear.toString());
 
-        // Assuming UpdateAlbumRequest might not have artistIds originally but backend requires it now.
-        // If request has artistIds, append them.
         if (request.artistIds && request.artistIds.length > 0) {
             request.artistIds.forEach(id => {
                 formData.append("artistIds", id);
@@ -75,4 +69,3 @@ export const AlbumService = {
         return api.delete(`/api/v1/albums/${id}`);
     },
 };
-

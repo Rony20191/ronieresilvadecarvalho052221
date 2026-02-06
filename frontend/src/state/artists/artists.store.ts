@@ -64,7 +64,6 @@ class ArtistsStore {
 
     setSearch(search: string) {
         const { pageRequest } = this.snapshot;
-        // Reset to first page on search
         this.setState({
             search,
             pageRequest: { ...pageRequest, page: 0 }

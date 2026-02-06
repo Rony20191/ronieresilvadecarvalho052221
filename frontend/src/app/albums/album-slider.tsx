@@ -19,7 +19,6 @@ function CoverCarousel({ covers, albumTitle }: CoverCarouselProps) {
     const [isHovering, setIsHovering] = useState(false)
     const [isAnimating, setIsAnimating] = useState(false)
 
-    // Auto-rotate covers when hovering
     useEffect(() => {
         if (!isHovering || covers.length <= 1) return
 
@@ -52,7 +51,6 @@ function CoverCarousel({ covers, albumTitle }: CoverCarouselProps) {
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => {
                 setIsHovering(false)
-                // Reset to primary cover when mouse leaves
                 const primaryIndex = covers.findIndex(c => c.primary)
                 setCurrentIndex(primaryIndex >= 0 ? primaryIndex : 0)
             }}

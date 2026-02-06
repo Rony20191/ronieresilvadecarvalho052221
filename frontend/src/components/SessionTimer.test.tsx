@@ -4,14 +4,11 @@ import SessionTimer from './SessionTimer'
 import { authStore } from '@/state/auth/auth.store'
 import { BehaviorSubject } from 'rxjs'
 
-// Mock Lucide icons
 vi.mock('lucide-react', () => ({
     Clock: () => <span>Clock</span>,
     RefreshCw: () => <span>Refresh</span>,
 }))
 
-// Mock auth store
-// Mock auth store
 const { subject } = vi.hoisted(() => {
     const { BehaviorSubject } = require('rxjs')
     return { subject: new BehaviorSubject({ isAuthenticated: false }) }
@@ -37,35 +34,27 @@ describe('SessionTimer', () => {
     })
 
     it('does not render when not authenticated', () => {
-        // @ts-ignore
         authStore.setAuthState({ isAuthenticated: false })
         render(<SessionTimer />)
         expect(screen.queryByText('Clock')).not.toBeInTheDocument()
     })
 
     it('renders time when authenticated', async () => {
-        // @ts-ignore
         authStore.getTimeRemaining.mockReturnValue({ minutes: 5, seconds: 0 })
-        // @ts-ignore
         authStore.setAuthState({ isAuthenticated: true })
 
         render(<SessionTimer />)
 
-        // Wait for effect
         expect(screen.getByText('05:00')).toBeInTheDocument()
     })
 
     it('updates time every second', () => {
-        // @ts-ignore
         authStore.getTimeRemaining.mockReturnValue({ minutes: 5, seconds: 0 })
-        // @ts-ignore
         authStore.setAuthState({ isAuthenticated: true })
 
         render(<SessionTimer />)
         expect(screen.getByText('05:00')).toBeInTheDocument()
 
-        // Advance time
-        // @ts-ignore
         authStore.getTimeRemaining.mockReturnValue({ minutes: 4, seconds: 59 })
 
         act(() => {

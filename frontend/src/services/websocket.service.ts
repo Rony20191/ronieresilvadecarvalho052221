@@ -27,7 +27,7 @@ class WebSocketClient {
         this.isConnecting = true;
 
         return new Promise((resolve, reject) => {
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
 
             this.client = new Client({
                 webSocketFactory: () => new SockJS(`${baseUrl}/api/ws`),
@@ -75,7 +75,6 @@ class WebSocketClient {
     }
 
     private resubscribeAll(): void {
-        // Resubscribe to all topics after reconnection
         this.handlers.forEach((_, topic) => {
             this.subscribeToTopic(topic);
         });
@@ -98,23 +97,19 @@ class WebSocketClient {
     }
 
     subscribe(topic: string, handler: MessageHandler): () => void {
-        // Add handler to the set
         if (!this.handlers.has(topic)) {
             this.handlers.set(topic, new Set());
         }
         this.handlers.get(topic)!.add(handler);
 
-        // Subscribe to topic if not already subscribed
         if (!this.subscriptions.has(topic) && this.client?.connected) {
             this.subscribeToTopic(topic);
         }
 
-        // Return unsubscribe function
         return () => {
             const handlers = this.handlers.get(topic);
             handlers?.delete(handler);
 
-            // If no more handlers for this topic, unsubscribe
             if (handlers?.size === 0) {
                 this.subscriptions.get(topic)?.unsubscribe();
                 this.subscriptions.delete(topic);
@@ -136,5 +131,4 @@ class WebSocketClient {
     }
 }
 
-// Singleton instance
 export const webSocketClient = new WebSocketClient();

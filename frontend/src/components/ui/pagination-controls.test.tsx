@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { Pagination } from './pagination-controls'
 
-// Mock Lucide icons
 vi.mock('lucide-react', () => ({
     ChevronLeft: () => <span>Prev</span>,
     ChevronRight: () => <span>Next</span>,
@@ -24,9 +23,6 @@ describe('Pagination', () => {
 
     it('disables previous buttons on first page', () => {
         render(<Pagination {...defaultProps} currentPage={0} />)
-        // Assuming buttons are rendered in order: First, Prev, Next, Last
-        // The content is 'First' (ChevronsLeft) and 'Prev' (ChevronLeft)
-        // We can find by text "First" parent button
         expect(screen.getByText('First').closest('button')).toBeDisabled()
         expect(screen.getByText('Prev').closest('button')).toBeDisabled()
     })
@@ -39,7 +35,6 @@ describe('Pagination', () => {
 
     it('calls onPageChange with correct page', () => {
         render(<Pagination {...defaultProps} />)
-        // Click Next
         fireEvent.click(screen.getByText('Next').closest('button')!)
         expect(defaultProps.onPageChange).toHaveBeenCalledWith(2)
     })

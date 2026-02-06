@@ -6,7 +6,6 @@ export const AuthService = {
     login: async (username: string, password: string): Promise<AuthResponse> => {
         const response = await api.post<AuthResponse>("/api/v1/auth/login", { username, password });
 
-        // Salva nos cookies com segurança básica (Secure se HTTPS, SameSite lax)
         Cookies.set("access_token", response.access_token, { expires: 1, sameSite: 'lax' });
         Cookies.set("refresh_token", response.refresh_token, { expires: 7, sameSite: 'lax' });
 

@@ -4,7 +4,6 @@ import LoginPage from './page'
 import { authStore } from '@/state/auth/auth.store'
 import { useRouter } from 'next/navigation'
 
-// Mock dependencies
 vi.mock('@/state/auth/auth.store', () => ({
     authStore: {
         login: vi.fn(),
@@ -25,7 +24,6 @@ describe('LoginPage', () => {
     const mockPush = vi.fn()
 
     beforeEach(() => {
-        // @ts-ignore
         useRouter.mockReturnValue({ push: mockPush })
     })
 
@@ -37,7 +35,6 @@ describe('LoginPage', () => {
     })
 
     it('handles login success', async () => {
-        // @ts-ignore
         authStore.login.mockResolvedValue(true)
 
         render(<LoginPage />)
@@ -55,7 +52,6 @@ describe('LoginPage', () => {
     })
 
     it('handles login failure', async () => {
-        // @ts-ignore
         authStore.login.mockRejectedValue(new Error('Auth failed'))
 
         render(<LoginPage />)

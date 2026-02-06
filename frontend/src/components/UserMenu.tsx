@@ -28,7 +28,6 @@ export default function UserMenu() {
         window.location.href = '/login';
     };
 
-    // Close menu when clicking outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

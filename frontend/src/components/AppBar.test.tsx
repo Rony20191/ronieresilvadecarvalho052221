@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import AppBar from './AppBar'
 
-// Mock Child Components
 vi.mock('./UserMenu', () => ({
     default: () => <div data-testid="user-menu">UserMenu</div>
 }))
@@ -11,7 +10,6 @@ vi.mock('./SessionTimer', () => ({
     default: () => <div data-testid="session-timer">SessionTimer</div>
 }))
 
-// Mock Lucide icons
 vi.mock('lucide-react', () => ({
     Menu: () => <span>Menu</span>,
     Bell: () => <span>Bell</span>,
