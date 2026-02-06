@@ -1,42 +1,74 @@
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - music-catalog-manage
+
   backend:
     build: 
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
     ports:
-      - "8080:8080"
+      - "8080:8080" # Exposed for direct access if needed
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/music_catalog_manage
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: lobcat123@@
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/music
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_REDIS_HOST: redis
+      KC_ISSUER_URI: http://keycloak:8080/realms/music-app
+      KC_JWKS_URI: http://keycloak:8080/realms/music-app/protocol/openid-connect/certs
+      KC_SERVER_URL: http://keycloak:8080
+      KC_REALM: music-app
+      KC_CLIENT_ID: music-app-client2
+      KC_CLIENT_SECRET: FdBzYFPVIo20FgDrVZyrtpsxz9PVOate
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "wget", "-qO-", "http://backend:8080/api/actuator/health"]
       interval: 1m30s
       timeout: 30s
       retries: 5
       start_period: 30s
     depends_on:
-      - postgres
-      - minio
-      - redis
+      postgres:
+        condition: service_started
+      minio:
+        condition: service_started
+      redis:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
     networks:
       - music-catalog-manage
+
   frontend:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+      target: ${BUILD_TARGET:-dev} # Target dynamic stage (dev or runner)
     container_name: frontend
     ports:
-      - "3001:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "3000:3000" # Exposed for direct access if needed
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+
     depends_on:
       - backend
+    # environment:
+    #   - WATCHPACK_POLLING=true # Use if HMR issues on Windows
     networks:
       - music-catalog-manage
+
   minio:
     image: minio/minio
     container_name: minio
@@ -44,8 +76,8 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: 'xukiliiiii'
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
     command: server /data --console-address ":9001"
     networks:
       - music-catalog-manage
@@ -55,33 +87,40 @@ services:
     ports:
       - "6379:6379"
     environment:
-      - REDIS_PASSWORD=RedisPass
+      - REDIS_PASSWORD=${REDIS_PASS}
     networks:
       - music-catalog-manage
     volumes:
       - redis_data:/data
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.2
-    container_name: keycloak
     command: start-dev --import-realm
+    container_name: keycloack
     environment:
       KC_DB: dev-file
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     volumes:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - keycloak_data:/opt/keycloak/data
     ports:
       - "8081:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
     networks:
       - music-catalog-manage
   postgres:
     image: postgres:15
-    container_name: postgres
     ports:
       - "5433:5432"
+    container_name: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: lobcat123@@
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: music_catalog_manage
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -91,6 +130,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  keycloak_data:
 
 networks:
   music-catalog-manage:

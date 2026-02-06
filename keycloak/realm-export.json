@@ -1,0 +1,51 @@
+{
+    "realm": "music-app",
+    "enabled": true,
+    "users": [
+        {
+            "username": "admin",
+            "enabled": true,
+            "email": "admin@musicapp.com",
+            "emailVerified": true,
+            "firstName": "Admin",
+            "lastName": "User",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "admin",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "mb_admin"
+            ]
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "name": "mb_admin",
+                "description": "Administrator"
+            }
+        ]
+    },
+    "clients": [
+        {
+            "clientId": "music-app-client2",
+            "enabled": true,
+            "protocol": "openid-connect",
+            "publicClient": false,
+            "secret": "FdBzYFPVIo20FgDrVZyrtpsxz9PVOate",
+            "directAccessGrantsEnabled": true,
+            "standardFlowEnabled": true,
+            "serviceAccountsEnabled": false,
+            "redirectUris": [
+                "http://frontend:3000/*",
+                "http://frontend:3001/*"
+            ],
+            "webOrigins": [
+                "*"
+            ]
+        }
+    ]
+}
