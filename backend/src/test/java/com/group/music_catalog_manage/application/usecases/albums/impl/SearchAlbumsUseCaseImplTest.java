@@ -48,7 +48,6 @@ class SearchAlbumsUseCaseImplTest {
     @Test
     @DisplayName("Should search albums successfully")
     void shouldSearchAlbumsSuccessfully() {
-        // Arrange
         SearchAlbumRequest request = new SearchAlbumRequest("Test", null, null, null, null, null);
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -73,10 +72,8 @@ class SearchAlbumsUseCaseImplTest {
         given(albumRepositoryPort.findByTitle(anyString(), any(Pageable.class))).willReturn(albumPage);
         given(artistRepositoryPort.findByIds(any())).willReturn(List.of(artist));
 
-        // Act
         Page<AlbumResponse> result = searchAlbumsUseCase.execute(request, pageable);
 
-        // Assert
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getContent().get(0).title()).isEqualTo("Test Album");

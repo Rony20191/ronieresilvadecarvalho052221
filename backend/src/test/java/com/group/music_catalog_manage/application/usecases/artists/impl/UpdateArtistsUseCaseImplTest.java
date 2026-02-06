@@ -31,7 +31,6 @@ class UpdateArtistsUseCaseImplTest {
     @Test
     @DisplayName("Should update artist successfully")
     void shouldUpdateArtistSuccessfully() {
-        // Arrange
         UUID artistId = UUID.randomUUID();
         UpdateArtistRequest request = new UpdateArtistRequest();
         request.setName("Updated Artist");
@@ -46,10 +45,8 @@ class UpdateArtistsUseCaseImplTest {
 
         given(artistRepositoryPort.update(eq(artistId), any(Artist.class))).willReturn(updatedArtist);
 
-        // Act
         ArtistResponse response = updateArtistsUseCase.execute(artistId, request);
 
-        // Assert
         assertThat(response).isNotNull();
         assertThat(response.getId()).isEqualTo(artistId);
         assertThat(response.getName()).isEqualTo(request.getName());

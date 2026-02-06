@@ -31,7 +31,6 @@ class CreateArtistsUseCaseImplTest {
     @Test
     @DisplayName("Should create artist successfully")
     void shouldCreateArtistSuccessfully() {
-        // Arrange
         CreateArtistRequest request = new CreateArtistRequest();
         request.setName("Test Artist");
         request.setType(ArtistType.SOLO);
@@ -45,10 +44,8 @@ class CreateArtistsUseCaseImplTest {
 
         given(artistRepositoryPort.save(any(Artist.class))).willReturn(savedArtist);
 
-        // Act
         ArtistResponse response = createArtistsUseCase.execute(request);
 
-        // Assert
         assertThat(response).isNotNull();
         assertThat(response.getId()).isEqualTo(artistId);
         assertThat(response.getName()).isEqualTo(request.getName());

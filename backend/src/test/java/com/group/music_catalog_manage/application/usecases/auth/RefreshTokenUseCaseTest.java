@@ -25,7 +25,6 @@ class RefreshTokenUseCaseTest {
     @Test
     @DisplayName("Should refresh token successfully")
     void shouldRefreshTokenSuccessfully() {
-        // Arrange
         String refreshToken = "old-refresh";
         AuthResponse response = new AuthResponse();
         response.setAccessToken("new-token");
@@ -36,10 +35,8 @@ class RefreshTokenUseCaseTest {
 
         given(authServicePort.refreshToken(refreshToken)).willReturn(response);
 
-        // Act
         AuthResponse result = refreshTokenUseCase.execute(refreshToken);
 
-        // Assert
         assertThat(result).isNotNull();
         assertThat(result.getAccessToken()).isEqualTo("new-token");
         verify(authServicePort).refreshToken(refreshToken);

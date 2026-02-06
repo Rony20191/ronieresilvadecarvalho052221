@@ -25,7 +25,6 @@ class LoginUseCaseTest {
     @Test
     @DisplayName("Should login successfully")
     void shouldLoginSuccessfully() {
-        // Arrange
         String username = "user";
         String password = "password";
         AuthResponse response = new AuthResponse();
@@ -37,10 +36,8 @@ class LoginUseCaseTest {
 
         given(authServicePort.login(username, password)).willReturn(response);
 
-        // Act
         AuthResponse result = loginUseCase.execute(username, password);
 
-        // Assert
         assertThat(result).isNotNull();
         assertThat(result.getAccessToken()).isEqualTo("token");
         verify(authServicePort).login(username, password);

@@ -21,17 +21,14 @@ class JpaArtistRepositoryTest {
     @Test
     @DisplayName("Should find artists by name containing ignore case")
     void shouldFindByNameContainingIgnoreCase() {
-        // Arrange
         ArtistEntity artist = ArtistEntity.builder()
                 .name("Iron Maiden")
                 .type(ArtistType.BAND)
                 .build();
         artistRepository.save(artist);
 
-        // Act
         Page<ArtistEntity> result = artistRepository.findByNameContainingIgnoreCase("iron", PageRequest.of(0, 10));
 
-        // Assert
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getContent().get(0).getName()).isEqualTo("Iron Maiden");
     }
@@ -39,7 +36,6 @@ class JpaArtistRepositoryTest {
     @Test
     @DisplayName("Should find artists by ids")
     void shouldFindByIdIn() {
-        // Arrange
         ArtistEntity artist1 = ArtistEntity.builder()
                 .name("Artist 1")
                 .type(ArtistType.SOLO)
@@ -52,10 +48,8 @@ class JpaArtistRepositoryTest {
         artist1 = artistRepository.save(artist1);
         artist2 = artistRepository.save(artist2);
 
-        // Act
         List<ArtistEntity> result = artistRepository.findByIdIn(List.of(artist1.getId(), artist2.getId()));
 
-        // Assert
         assertThat(result).hasSize(2);
         assertThat(result).extracting(ArtistEntity::getName).containsExactlyInAnyOrder("Artist 1", "Artist 2");
     }

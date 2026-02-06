@@ -28,17 +28,14 @@ class DeleteAlbumUseCaseImplTest {
     @Test
     @DisplayName("Should delete album successfully")
     void shouldDeleteAlbumSuccessfully() {
-        // Arrange
         UUID albumId = UUID.randomUUID();
         Album album = new Album();
         album.setId(albumId);
 
         given(albumRepositoryPort.findById(albumId)).willReturn(Optional.of(album));
 
-        // Act
         deleteAlbumUseCase.execute(albumId.toString());
 
-        // Assert
         verify(albumRepositoryPort).findById(albumId);
         verify(albumRepositoryPort).deleteById(albumId);
     }
@@ -46,11 +43,9 @@ class DeleteAlbumUseCaseImplTest {
     @Test
     @DisplayName("Should throw exception when album not found")
     void shouldThrowExceptionWhenAlbumNotFound() {
-        // Arrange
         UUID albumId = UUID.randomUUID();
         given(albumRepositoryPort.findById(albumId)).willReturn(Optional.empty());
 
-        // Act & Assert
         assertThatThrownBy(() -> deleteAlbumUseCase.execute(albumId.toString()))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Album not found with id: " + albumId);

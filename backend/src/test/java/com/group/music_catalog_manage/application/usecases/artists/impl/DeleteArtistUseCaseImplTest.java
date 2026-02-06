@@ -29,17 +29,14 @@ class DeleteArtistUseCaseImplTest {
     @Test
     @DisplayName("Should delete artist successfully")
     void shouldDeleteArtistSuccessfully() {
-        // Arrange
         UUID artistId = UUID.randomUUID();
         Artist artist = new Artist();
         artist.setId(artistId);
 
         given(artistRepositoryPort.findById(artistId)).willReturn(Optional.of(artist));
 
-        // Act
         deleteArtistUseCase.execute(artistId);
 
-        // Assert
         verify(artistRepositoryPort).findById(artistId);
         verify(artistRepositoryPort).deleteById(artistId);
     }
@@ -47,11 +44,9 @@ class DeleteArtistUseCaseImplTest {
     @Test
     @DisplayName("Should throw ArtistNotFoundException when artist not found")
     void shouldThrowExceptionWhenArtistNotFound() {
-        // Arrange
         UUID artistId = UUID.randomUUID();
         given(artistRepositoryPort.findById(artistId)).willReturn(Optional.empty());
 
-        // Act & Assert
         assertThatThrownBy(() -> deleteArtistUseCase.execute(artistId))
                 .isInstanceOf(ArtistNotFoundException.class)
                 .hasMessage("Artist not found with id: " + artistId);

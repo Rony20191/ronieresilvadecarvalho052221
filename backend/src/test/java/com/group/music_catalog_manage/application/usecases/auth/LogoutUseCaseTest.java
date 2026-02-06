@@ -22,13 +22,10 @@ class LogoutUseCaseTest {
     @Test
     @DisplayName("Should logout successfully")
     void shouldLogoutSuccessfully() {
-        // Arrange
         String refreshToken = "refresh-token";
 
-        // Act
         logoutUseCase.execute(refreshToken);
 
-        // Assert
         verify(authServicePort).logout(refreshToken);
     }
 }

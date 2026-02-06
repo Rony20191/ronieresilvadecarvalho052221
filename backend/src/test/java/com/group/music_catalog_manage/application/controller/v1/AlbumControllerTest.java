@@ -53,7 +53,6 @@ class AlbumControllerTest {
     @Test
     @DisplayName("Should create album successfully")
     void shouldCreateAlbumSuccessfully() throws Exception {
-        // Arrange
         UUID albumId = UUID.randomUUID();
         String title = "New Album";
         UUID artistId = UUID.randomUUID();
@@ -81,7 +80,6 @@ class AlbumControllerTest {
                 "image/jpeg",
                 "content".getBytes());
 
-        // Act & Assert
         mockMvc.perform(multipart("/v1/albums")
                 .file(coverPart)
                 .param("title", title)

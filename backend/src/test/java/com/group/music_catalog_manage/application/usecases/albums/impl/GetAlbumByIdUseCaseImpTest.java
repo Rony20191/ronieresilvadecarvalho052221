@@ -36,7 +36,6 @@ class GetAlbumByIdUseCaseImpTest {
     @Test
     @DisplayName("Should return album response when found")
     void shouldReturnAlbumResponseWhenFound() {
-        // Arrange
         UUID albumId = UUID.randomUUID();
         Album album = new Album();
         album.setId(albumId);
@@ -46,10 +45,8 @@ class GetAlbumByIdUseCaseImpTest {
 
         given(albumRepositoryPort.findById(albumId)).willReturn(Optional.of(album));
 
-        // Act
         AlbumResponse response = getAlbumByIdUseCase.execute(albumId.toString());
 
-        // Assert
         assertThat(response).isNotNull();
         assertThat(response.id()).isEqualTo(albumId);
         assertThat(response.title()).isEqualTo("Test Album");
@@ -59,11 +56,9 @@ class GetAlbumByIdUseCaseImpTest {
     @Test
     @DisplayName("Should throw AlbumNotFoundException when album not found")
     void shouldThrowExceptionWhenAlbumNotFound() {
-        // Arrange
         UUID albumId = UUID.randomUUID();
         given(albumRepositoryPort.findById(albumId)).willReturn(Optional.empty());
 
-        // Act & Assert
         assertThatThrownBy(() -> getAlbumByIdUseCase.execute(albumId.toString()))
                 .isInstanceOf(AlbumNotFoundException.class)
                 .hasMessage("Album not found with id: " + albumId);

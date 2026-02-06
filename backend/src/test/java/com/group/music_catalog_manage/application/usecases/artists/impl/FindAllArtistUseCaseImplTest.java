@@ -34,7 +34,6 @@ class FindAllArtistUseCaseImplTest {
     @Test
     @DisplayName("Should find all artists successfully")
     void shouldFindAllArtistsSuccessfully() {
-        // Arrange
         String name = "Test";
         Pageable pageable = PageRequest.of(0, 10);
         Artist artist = new Artist();
@@ -45,10 +44,8 @@ class FindAllArtistUseCaseImplTest {
 
         given(artistRepositoryPort.findByName(anyString(), any(Pageable.class))).willReturn(artistPage);
 
-        // Act
         Page<ArtistResponse> result = findAllArtistUseCase.execute(name, pageable);
 
-        // Assert
         assertThat(result).isNotNull();
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getContent().get(0).getName()).isEqualTo("Test Artist");

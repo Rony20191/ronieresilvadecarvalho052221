@@ -30,7 +30,6 @@ class FindByIdUseCaseImplTest {
     @Test
     @DisplayName("Should find artist by id successfully")
     void shouldFindArtistByIdSuccessfully() {
-        // Arrange
         UUID artistId = UUID.randomUUID();
         Artist artist = new Artist();
         artist.setId(artistId);
@@ -38,10 +37,8 @@ class FindByIdUseCaseImplTest {
 
         given(artistRepositoryPort.findById(artistId)).willReturn(Optional.of(artist));
 
-        // Act
         ArtistResponse response = findByIdUseCase.execute(artistId);
 
-        // Assert
         assertThat(response).isNotNull();
         assertThat(response.getId()).isEqualTo(artistId);
         assertThat(response.getName()).isEqualTo("Test Artist");
@@ -50,11 +47,9 @@ class FindByIdUseCaseImplTest {
     @Test
     @DisplayName("Should throw ArtistNotFoundException when artist not found")
     void shouldThrowExceptionWhenArtistNotFound() {
-        // Arrange
         UUID artistId = UUID.randomUUID();
         given(artistRepositoryPort.findById(artistId)).willReturn(Optional.empty());
 
-        // Act & Assert
         assertThatThrownBy(() -> findByIdUseCase.execute(artistId))
                 .isInstanceOf(ArtistNotFoundException.class)
                 .hasMessage("Artist not found with id: " + artistId);

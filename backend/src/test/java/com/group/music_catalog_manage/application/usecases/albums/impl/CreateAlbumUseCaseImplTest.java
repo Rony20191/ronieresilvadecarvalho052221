@@ -46,7 +46,6 @@ class CreateAlbumUseCaseImplTest {
     @Test
     @DisplayName("Should create album successfully with covers")
     void shouldCreateAlbumSuccessfullyWithCovers() throws Exception {
-        // Arrange
         String title = "Test Album";
         UUID artistId = UUID.randomUUID();
         String description = "Test Description";
@@ -73,10 +72,8 @@ class CreateAlbumUseCaseImplTest {
             return album;
         });
 
-        // Act
         AlbumResponse response = createAlbumUseCase.execute(title, artistIds, description, releaseYear, covers);
 
-        // Assert
         assertThat(response).isNotNull();
         assertThat(response.id()).isEqualTo(albumId);
         assertThat(response.title()).isEqualTo(title);
